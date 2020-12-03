@@ -7,8 +7,7 @@ from bayesmark.data import DATA_LOADERS, REAL_DATA_LOADERS
 from bayesmark.constants import MODEL_NAMES
 from time import sleep,time
 import glob
-from combine_experiments import combine
-from utils import get_paths_and_run_name, copy_baseline, get_opt, run_cmd, run_bayesmark_init, run_bayesmark_agg, run_bayesmark_anal
+from utils import get_paths_and_run_name, copy_baseline, get_opt, run_cmd, combine_experiments
 
 no_multi_class_cuml = ['RF-cuml', 'SVM-cuml', 'xgb-cuml']
 multi_class_data = ['iris', 'digits', 'wine', 'mnist']
@@ -23,7 +22,8 @@ def run_all(opt_path, n_jobs=16, N_STEP=16, N_BATCH=8, N_REPEAT=1,
 
     in_path, out_path, name = get_paths_and_run_name()
     opt_root,opt = get_opt(opt_path)
-    run_bayesmark_init(out_path, name)
+    cmd = f"bayesmark-init -dir {out_path} -b {name}"
+    run_cmd(cmd)
     copy_baseline(in_path, name, N_STEP, N_BATCH, run_cuml)
 
     cmds = [] 
@@ -74,8 +74,11 @@ def run_all(opt_path, n_jobs=16, N_STEP=16, N_BATCH=8, N_REPEAT=1,
             cmds = run_cmds(cmds, min(n-last, lc))
         last = n
         
-    run_bayesmark_agg(out_path, name)
-    run_bayesmark_anal(out_path, name)
+    cmd = f"bayesmark-agg -dir {out_path} -b {name}"
+    run_cmd(cmd)
+
+    cmd = f"bayesmark-anal -dir {out_path} -b {name} -v"
+    run_cmd(cmd)
     
     duration = time() - start
     print(f"All done!! {name} Total time: {duration:.1f} seconds")
@@ -115,6 +118,6 @@ if __name__ == '__main__':
             data_loaders=REAL_DATA_LOADERS, must_have_tag=['MLP', 'xgb'] 
             )
     print(name1, name2)
-    combine([name1, name2])
+    combine_experiments([name1, name2])
 
     print(f"Total time: {t1+t2:.1f} seconds")

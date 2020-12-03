@@ -42,18 +42,6 @@ def get_paths_and_run_name():
 
     return in_path, out_path, name
 
-def run_bayesmark_init(out_path, name):
-    cmd = f"bayesmark-init -dir {out_path} -b {name}"
-    run_cmd(cmd)
-
-def run_bayesmark_agg(out_path, name):
-    cmd = f"bayesmark-agg -dir {out_path} -b {name}"
-    run_cmd(cmd)
-
-def run_bayesmark_anal(out_path, name):
-    cmd = f"bayesmark-anal -dir {out_path} -b {name} -v"
-    run_cmd(cmd)
-
 def run_cmd(cmd):
     print(cmd)
     os.system(cmd)
