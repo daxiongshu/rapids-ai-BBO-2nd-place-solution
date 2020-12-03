@@ -14,7 +14,7 @@ multi_class_data = ['iris', 'digits', 'wine', 'mnist']
 real_data = []
 COUNTER = 0 
 
-def run_all(opt_path, n_jobs=16, N_STEP=16, N_BATCH=8, N_REPEAT=1, 
+def run(opt_path, n_jobs=16, N_STEP=16, N_BATCH=8, N_REPEAT=1, 
             run_cuml=False, quick_check=False, data_loaders=DATA_LOADERS,
             model_names=MODEL_NAMES, must_have_tag=None):
 
@@ -107,17 +107,22 @@ def check_complete(N, out_path, name):
     n = len(files)
     return n == N, n
 
-if __name__ == '__main__':
-    opt = './example_submissions/pysotopen'
+def run_one_opt(opt, quick_check=False):
 
     # sklearn dataset
-    name1,t1 = run_all(opt, N_STEP=16, N_BATCH=8, N_REPEAT=3, quick_check=False, n_jobs=32, run_cuml=True)
+    name1,t1 = run(opt, N_STEP=16, N_BATCH=8, N_REPEAT=3, quick_check=quick_check, n_jobs=32, run_cuml=True)
+    if quick_check:
+        return 
 
     # real dataset
-    name2,t2 = run_all(opt, N_STEP=16, N_BATCH=8, N_REPEAT=3, quick_check=False, n_jobs=32, run_cuml=True,
+    name2,t2 = run(opt, N_STEP=16, N_BATCH=8, N_REPEAT=3, quick_check=False, n_jobs=32, run_cuml=True,
             data_loaders=REAL_DATA_LOADERS, must_have_tag=['MLP', 'xgb'] 
             )
     print(name1, name2)
     combine_experiments([name1, name2])
 
-    print(f"Total time: {t1+t2:.1f} seconds")
+    print("Finished!", opt, f"Total time: {t1+t2:.1f} seconds")
+
+if __name__ == '__main__':
+    opt='./example_submissions/turbosk'
+    run_one_opt(opt, quick_check=True)
