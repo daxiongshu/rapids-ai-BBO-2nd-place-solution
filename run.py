@@ -13,52 +13,23 @@ import glob
 from random import shuffle, randint
 import numpy as np
 from combine_experiments import combine
-from utils import get_run_name, run_cmd, run_bayesmark_init, run_bayesmark_agg, run_bayesmark_anal
+from utils import get_paths_and_run_name, get_opt, run_cmd, run_bayesmark_init, run_bayesmark_agg, run_bayesmark_anal
 
 no_multi_class_cuml = ['RF-cuml', 'SVM-cuml', 'xgb-cuml']
 multi_class_data = ['iris', 'digits', 'wine', 'mnist']
 real_data = []
 COUNTER = 0 
 
-def run_all(opt, n_jobs=16, N_STEP=16, N_BATCH=8, N_REPEAT=1, 
+def run_all(opt_path, n_jobs=16, N_STEP=16, N_BATCH=8, N_REPEAT=1, 
             run_cuml=False, quick_check=False, data_loaders=DATA_LOADERS,
             model_names=MODEL_NAMES, must_have_tag=None):
 
     start = time()
-    in_path = os.path.abspath('./input')
-    out_path = os.path.abspath('./output')
-    if 'RandomSearch' == opt:
-        opt_root,opt = '.',opt
-    elif 'RandomSearch' in opt:
-        assert 0, "not supported yet"
-        optx = opt.split()[-1]
-        opt_root,opt = optx.split('/')[-2], optx.split('/')[-1]
-        opt = 'RandomSearch '+opt
-    else:
-        optx = opt
-        opt_root,opt = optx.split('/')[-2], optx.split('/')[-1]
 
-    name = get_run_name()
-    
-    if os.path.exists(out_path) == 0:
-        os.mkdir(out_path)
-        
-    if os.path.exists(f"{out_path}/{name}"):
-        assert 0, f"{out_path}/{name} already exists"
-                      
+    in_path, out_path, name = get_paths_and_run_name()
+    opt_root,opt = get_opt(opt_path)
     run_bayesmark_init(out_path, name)
-    
-    tag = '-cuml-all' if run_cuml else ''
-    baseline = f"{in_path}/baseline-{N_STEP}-{N_BATCH}{tag}.json"
-    if os.path.exists(baseline)==False:
-        assert 0, f"{baseline} doesn't exist"
-   
-    if 'RandomSearch' not in opt:
-        cmd = f'cp {baseline} {out_path}/{name}/derived/baseline.json'
-        run_cmd(cmd)
-    else:
-        if os.path.exists(baseline)==False:
-            assert 0, f"{baseline} doesn't exist"
+    copy_baseline(in_path, name, N_STEP, N_BATCH, run_cuml)
 
     cmds = [] 
     if quick_check: 
