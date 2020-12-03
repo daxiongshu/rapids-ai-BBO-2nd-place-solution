@@ -93,7 +93,7 @@ def run_all(opt, n_jobs=16, N_STEP=16, N_BATCH=8, N_REPEAT=1,
                         continue
                     if run_cuml and model == 'SVM-cuml' and data_loaders[data][1] == 1:
                         continue
-                    cmd = f"bayesmark-launch -dir {out_path} -b {name} -n {N_STEP} -r 1 -p {N_BATCH} -o {opt} --opt-root {opt_root} -v -c {model} -d {data} -m {metric} -dr ./big_data&"
+                    cmd = f"bayesmark-launch -dir {out_path} -b {name} -n {N_STEP} -r 1 -p {N_BATCH} -o {opt} --opt-root {opt_root} -v -c {model} -d {data} -m {metric} -dr ./more_data&"
                     cmds.append(cmd)
 
     N = len(cmds)
