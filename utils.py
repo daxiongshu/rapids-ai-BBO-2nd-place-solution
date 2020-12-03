@@ -15,7 +15,7 @@ def get_opt(opt_path):
         opt = os.path.basename(opt_path)
     return opt_root, opt
 
-def copy_baseline(in_path, name, N_STEP, N_BATCH, run_cuml):
+def copy_baseline(in_path, out_path, name, opt, N_STEP, N_BATCH, run_cuml):
     tag = '-cuml-all' if run_cuml else ''
     baseline = f"{in_path}/baseline-{N_STEP}-{N_BATCH}{tag}.json"
     if os.path.exists(baseline)==False:

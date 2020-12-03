@@ -24,7 +24,7 @@ def run_all(opt_path, n_jobs=16, N_STEP=16, N_BATCH=8, N_REPEAT=1,
     opt_root,opt = get_opt(opt_path)
     cmd = f"bayesmark-init -dir {out_path} -b {name}"
     run_cmd(cmd)
-    copy_baseline(in_path, name, N_STEP, N_BATCH, run_cuml)
+    copy_baseline(in_path, out_path, name, opt, N_STEP, N_BATCH, run_cuml)
 
     cmds = [] 
     if quick_check: 
@@ -111,8 +111,9 @@ if __name__ == '__main__':
     opt = './example_submissions/pysotopen'
 
     # sklearn dataset
-    name1,t1 = run_all(opt, N_STEP=16, N_BATCH=8, N_REPEAT=3, quick_check=False, n_jobs=32, run_cuml=True)#, must_have_tag='xgb')
+    name1,t1 = run_all(opt, N_STEP=16, N_BATCH=8, N_REPEAT=3, quick_check=True, n_jobs=32, run_cuml=True)
 
+    """
     # real dataset
     name2,t2 = run_all(opt, N_STEP=16, N_BATCH=8, N_REPEAT=3, quick_check=False, n_jobs=32, run_cuml=True,
             data_loaders=REAL_DATA_LOADERS, must_have_tag=['MLP', 'xgb'] 
@@ -121,3 +122,4 @@ if __name__ == '__main__':
     combine_experiments([name1, name2])
 
     print(f"Total time: {t1+t2:.1f} seconds")
+    """
