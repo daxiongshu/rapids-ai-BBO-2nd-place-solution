@@ -20,20 +20,18 @@ class TurboHyperOptimizer(AbstractOptimizer):
             Configuration of the optimization variables. See API description.
         """
         AbstractOptimizer.__init__(self, api_config)
-        self.turbo_opt = TurboOptimizer(api_config, **kwargs)  
-        self.sk_opt = HyperoptOptimizer(api_config) 
+        self.opt1 = TurboOptimizer(api_config, **kwargs)  
+        self.opt2 = HyperoptOptimizer(api_config) 
 
     def suggest(self, n_suggestions=1):
-        t_out = self.turbo_opt.suggest(n_suggestions)
-        s_out = self.sk_opt.suggest(n_suggestions)
-        #print("TURBO: ",t_out)
-        #print("SK: ",s_out)
+        t_out = self.opt1.suggest(n_suggestions)
+        s_out = self.opt2.suggest(n_suggestions)
         N = len(t_out)//2
         return t_out[:N] + s_out[N:]
-    
+
     def observe(self, X, y):
-        self.turbo_opt.observe(X, y)
-        self.sk_opt.observe(X, y)
+        self.opt1.observe(X, y)
+        self.opt2.observe(X, y)
 
 if __name__ == "__main__":
     experiment_main(TurboHyperOptimizer)
