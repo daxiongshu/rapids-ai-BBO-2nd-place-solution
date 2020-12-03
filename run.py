@@ -96,9 +96,6 @@ def run_all(opt, n_jobs=16, N_STEP=16, N_BATCH=8, N_REPEAT=1,
                     cmd = f"bayesmark-launch -dir {out_path} -b {name} -n {N_STEP} -r 1 -p {N_BATCH} -o {opt} --opt-root {opt_root} -v -c {model} -d {data} -m {metric} -dr ./big_data&"
                     cmds.append(cmd)
 
-    #for _ in range(5):
-    #    np.random.shuffle(cmds)
-    #short(cmds)
     N = len(cmds)
     cmds = run_cmds(cmds, min(n_jobs, N))
 
@@ -146,24 +143,6 @@ def check_complete(N, out_path, name):
     n = len(files)
     return n == N, n
 
-def short(cmds):
-    for cmd in cmds:
-        xx = cmd.split()
-        line = []
-        for c, i in enumerate(xx):
-            if i=='-c' or i == '-d':
-                line.append(xx[c+1])
-        print(line)
-
-def get_gpu():
-    cmd = "nvidia-smi --query-gpu=utilization.gpu --format=csv"
-    x = subprocess.check_output(cmd.split())
-    x = str(x).split('\\n')[1:-1]
-    x = [int(i[:-2]) for i in x]
-    print(x)
-    minx = min(x)
-    i = [c for c,i in enumerate(x) if i==minx][0]
-    return i
 
 if __name__ == '__main__':
     opt = './example_submissions/hyperopt'
