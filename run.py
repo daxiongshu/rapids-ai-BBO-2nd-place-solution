@@ -1,19 +1,14 @@
 import warnings
 warnings.filterwarnings("ignore")
 
-from datetime import datetime
-import sys
 import os
-import subprocess
 
 from bayesmark.data import DATA_LOADERS, REAL_DATA_LOADERS
 from bayesmark.constants import MODEL_NAMES
 from time import sleep,time
 import glob
-from random import shuffle, randint
-import numpy as np
 from combine_experiments import combine
-from utils import get_paths_and_run_name, get_opt, run_cmd, run_bayesmark_init, run_bayesmark_agg, run_bayesmark_anal
+from utils import get_paths_and_run_name, copy_baseline, get_opt, run_cmd, run_bayesmark_init, run_bayesmark_agg, run_bayesmark_anal
 
 no_multi_class_cuml = ['RF-cuml', 'SVM-cuml', 'xgb-cuml']
 multi_class_data = ['iris', 'digits', 'wine', 'mnist']
