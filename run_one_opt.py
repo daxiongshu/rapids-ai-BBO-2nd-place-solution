@@ -11,8 +11,10 @@ from utils import get_paths_and_run_name, copy_baseline, get_opt, run_cmd, combi
 
 no_multi_class_cuml = ['RF-cuml', 'SVM-cuml', 'xgb-cuml']
 multi_class_data = ['iris', 'digits', 'wine', 'mnist']
-real_data = []
-COUNTER = 0 
+
+COUNTER = 0
+NUM_GPUS = 8 
+N_JOBS = NUM_GPUS*4
 
 def run(opt_path, n_jobs=16, N_STEP=16, N_BATCH=8, N_REPEAT=1, 
             run_cuml=False, quick_check=False, data_loaders=DATA_LOADERS,
@@ -94,7 +96,7 @@ def run_cmds(cmds, n):
     global COUNTER
     for _ in range(n):
         cmd = cmds.pop()
-        os.environ["CUDA_VISIBLE_DEVICES"] = str(COUNTER%8)
+        os.environ["CUDA_VISIBLE_DEVICES"] = str(COUNTER % NUM_GPUS)
         COUNTER += 1
         run_cmd(cmd)
     return cmds
@@ -110,12 +112,12 @@ def check_complete(N, out_path, name):
 def run_one_opt(opt, quick_check=False):
 
     # sklearn dataset
-    name1,t1 = run(opt, N_STEP=16, N_BATCH=8, N_REPEAT=3, quick_check=quick_check, n_jobs=32, run_cuml=True)
+    name1,t1 = run(opt, N_STEP=16, N_BATCH=8, N_REPEAT=3, quick_check=quick_check, n_jobs=N_JOBS, run_cuml=True)
     if quick_check:
         return 
 
     # real dataset
-    name2,t2 = run(opt, N_STEP=16, N_BATCH=8, N_REPEAT=3, quick_check=False, n_jobs=32, run_cuml=True,
+    name2,t2 = run(opt, N_STEP=16, N_BATCH=8, N_REPEAT=3, quick_check=False, n_jobs=N_JOBS, run_cuml=True,
             data_loaders=REAL_DATA_LOADERS, must_have_tag=['MLP', 'xgb'] 
             )
     print(name1, name2)
