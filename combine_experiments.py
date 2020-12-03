@@ -9,7 +9,7 @@ from time import sleep,time
 import glob
 from random import shuffle, randint
 import numpy as np
-from utils import get_run_name
+from utils import get_run_name, run_cmd, run_bayesmark_init
 
 def combine(runs):
     

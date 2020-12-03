@@ -11,6 +11,7 @@ from time import sleep,time
 import glob
 from random import shuffle, randint
 import numpy as np
+from utils import get_run_name, run_cmd, run_bayesmark_init
 
 no_multi_class_cuml = ['RF-cuml', 'SVM-cuml', 'xgb-cuml']
 multi_class_data = ['iris', 'digits', 'wine']
@@ -35,9 +36,7 @@ def run_all(opt, n_jobs=16, N_STEP=16, N_BATCH=8, N_REPEAT=1,
         optx = opt
         opt_root,opt = optx.split('/')[-2], optx.split('/')[-1]
 
-    now = datetime.now()
-    name = now.strftime("%Y%m%d_%H%M%S")
-    name = f"run_{name}"
+    name = get_run_name()
     
     if os.path.exists(out_path) == 0:
         os.mkdir(out_path)
@@ -47,8 +46,7 @@ def run_all(opt, n_jobs=16, N_STEP=16, N_BATCH=8, N_REPEAT=1,
                       
 
     cmd = f"bayesmark-init -dir {out_path} -b {name}"
-    print(cmd)
-    os.system(cmd)
+    run_cmd(cmd)
     
     tag = '-cuml-all' if run_cuml else ''
     baseline = f"{in_path}/baseline-{N_STEP}-{N_BATCH}{tag}.json"
@@ -57,18 +55,14 @@ def run_all(opt, n_jobs=16, N_STEP=16, N_BATCH=8, N_REPEAT=1,
    
     if 'RandomSearch' not in opt:
         cmd = f'cp {baseline} {out_path}/{name}/derived/baseline.json'
-        print(cmd)
-        os.system(cmd)
+        run_cmd(cmd)
     else:
         if os.path.exists(baseline)==False:
             assert 0, f"{baseline} doesn't exist"
 
     cmds = [] 
     if quick_check: 
-        data_loaders = {'digits': (1,1)}
         data_loaders = {'boston': (2,2)}
-        data_loaders = {'breast': (1,1)}
-        data_loaders = {'higgs': (1,1)}
         if run_cuml:
             model_names = ['xgb-cuml']#['MLP-sgd-cuml']
         else:
@@ -89,7 +83,6 @@ def run_all(opt, n_jobs=16, N_STEP=16, N_BATCH=8, N_REPEAT=1,
                     if run_cuml==False and '-cuml' in model:
                         continue
                     if run_cuml and model in no_multi_class_cuml and data in multi_class_data:
-                        #print(model, data)
                         continue
                     if run_cuml and model == 'SVM-cuml' and data_loaders[data][1] == 1:
                         continue
@@ -113,12 +106,10 @@ def run_all(opt, n_jobs=16, N_STEP=16, N_BATCH=8, N_REPEAT=1,
         last = n
         
     cmd = f"bayesmark-agg -dir {out_path} -b {name}"
-    print(cmd)
-    os.system(cmd)
+    run_cmd(cmd)
     
     cmd = f"bayesmark-anal -dir {out_path} -b {name} -v"
-    print(cmd)
-    os.system(cmd)
+    run_cmd(cmd)
     
     duration = time() - start
     print(f"All done!! {name} Total time: {duration:.1f} seconds")
@@ -127,11 +118,9 @@ def run_cmds(cmds, n):
     global COUNTER
     for _ in range(n):
         cmd = cmds.pop()
-        print(cmd)
-        #gpu = randint(0,3)
         os.environ["CUDA_VISIBLE_DEVICES"]=str(COUNTER%4)
         COUNTER += 1
-        os.system(cmd)
+        run_cmd(cmd)
         sleep(3)
     return cmds
 
@@ -142,7 +131,6 @@ def check_complete(N, out_path, name):
     files = glob.glob(f"{path}/*.json")
     n = len(files)
     return n == N, n
-
 
 if __name__ == '__main__':
     opt = './example_submissions/hyperopt'
