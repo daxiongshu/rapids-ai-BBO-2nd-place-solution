@@ -1,7 +1,6 @@
 import warnings
 warnings.filterwarnings("ignore")
 
-from datetime import datetime
 import sys
 import os
 from bayesmark.data import DATA_LOADERS
@@ -10,6 +9,7 @@ from time import sleep,time
 import glob
 from random import shuffle, randint
 import numpy as np
+from utils import get_run_name
 
 def combine(runs):
     
@@ -17,9 +17,7 @@ def combine(runs):
     in_path = os.path.abspath('./input')
     out_path = os.path.abspath('./output')
     
-    now = datetime.now()
-    name = now.strftime("%Y%m%d_%H%M%S")
-    name = f"run_{name}"
+    name = get_run_name()
     
     if os.path.exists(out_path) == 0:
         os.mkdir(out_path)
@@ -27,10 +25,7 @@ def combine(runs):
     if os.path.exists(f"{out_path}/{name}"):
         assert 0, f"{out_path}/{name} already exists"
                       
-
-    cmd = f"bayesmark-init -dir {out_path} -b {name}"
-    print(cmd)
-    os.system(cmd)
+    run_bayesmark_init(out_path, name)
     
     folders = ['eval', 'log', 'suggest_log', 'time']
     
@@ -48,16 +43,13 @@ def combine(runs):
         assert 0, f"{baseline} doesn't exist"
    
     cmd = f'cp {baseline} {out_path}/{name}/derived/baseline.json'
-    print(cmd)
-    os.system(cmd)
+    run_cmd(cmd)
 
     cmd = f"bayesmark-agg -dir {out_path} -b {name}"
-    print(cmd)
-    os.system(cmd)
+    run_cmd(cmd)
     
     cmd = f"bayesmark-anal -dir {out_path} -b {name} -v"
-    print(cmd)
-    os.system(cmd)
+    run_cmd(cmd)
     
     duration = time() - start
     print(f"All done!! {name} Total time: {duration:.1f} seconds")
