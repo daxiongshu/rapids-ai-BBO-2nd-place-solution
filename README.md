@@ -35,7 +35,7 @@ Our solution includes two parts:
 - python setup.py install
 
 ### How to Run the Code
-- please change the global variable `NUM_GPUS` in 'run_one_opt.py' accordingly
+- please change the global variable `NUM_GPUS` in `run_one_opt.py` accordingly
 - run a quick sanity check experiment with `python run_one_opt.py`, which takes 6 mins on a dgx-1.
 - run the exhaustive search with `python run_exhaustive_search.py`. which takes less than 24 hours on a dgx-1.
 
