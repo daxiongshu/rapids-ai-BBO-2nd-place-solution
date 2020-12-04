@@ -1,15 +1,18 @@
 # <div align="left"><img src="img/rapids_logo.png" width="90px"/>&nbsp;NVIDIA RAPIDS.AI Solution of BBO NeurIPS 2020</div>
-We won **the 2nd place of the NeurIPS 2020 competition: Find the best black-box optimizer for machine learning.** [Leaderboard](https://bbochallenge.com/leaderboard)🎉 
+We won **the [2nd place of the NeurIPS 2020 competition](https://bbochallenge.com/leaderboard)**: **Find the best black-box optimizer (BBO) for machine learning**.🎉 
 We proposed a simple ensemble algorithm of black-box optimizers that outperforms any single optimizer but within the same timing budget. 
 Evaluation of optimizers is a computing-intensive and time consuming task since the number of test cases grow exponentially with models, datasets and metrics. In our case, we need to **evaluate 15 optimizers, execute 4,230 jobs, train 2.7 million models and run 541,440 optimizations (suggest-observe)**. Utilizing the [RAPIDS](rapids.ai) libraries [cuDF](https://github.com/rapidsai/cudf) and [cuML](https://github.com/rapidsai/cuml), our GPU Accelerated exhaustive search is capable of finding the best ensemble in reasonable time. On a DGX-1, the search time is **reduced from more than 10 days on two 20-core CPUs to less than 24 hours on 8-GPUs.**
 
 ### Introduction
-
+In this [competition](https://bbochallenge.com), black-box optimization algorithms are evaluated on real-world objective functions, using a benchmark system built on top of the AutoML challenge workflow and the [Bayesmark package](https://github.com/uber/bayesmark). This competition has widespread impact as black-box optimization is relevant for hyper-parameter tuning in almost every machine learning project (especially deep learning). The leader board will be determined using the optimization performance on held-out (hidden) objective functions, where the optimizer must run without human intervention. 
 
 ### Final Submission
 Our final submission is an ensemble of optimizer [TuRBO](https://github.com/uber-research/TuRBO) and [scikit-optimize](https://scikit-optimize.github.io/stable/). [Code](https://github.com/daxiongshu/rapids-ai-BBO-2nd-place-solution/tree/master/example_submissions/turbosk) is in `example_submissions/turbosk`.
 
 ### Soltuion Overview
+Our solution includes two parts:
+- A multi-GPU optimized exhaustive search algorithm (this repo).
+- Rapids-enabled Bayesmark ([rapids branch](https://github.com/daxiongshu/bayesmark/tree/rapids)) 
 
 ### Install Instructions
 #### Create a conda Environment
