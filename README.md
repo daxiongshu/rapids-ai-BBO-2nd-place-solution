@@ -15,7 +15,7 @@ Our solution includes two parts:
 - Rapids-enabled Bayesmark ([rapids branch](https://github.com/daxiongshu/bayesmark/tree/rapids)) 
 
 <div align="center"><img src="img/image1.png" />
-  GPU acceleration of BBO. (a) GPUs are used to execute computing intensive function evaluations with cuDF and cuML libraries. (b) Parallel execution of function evaluation and optimization on multiple GPUs.
+  GPU acceleration of BBO. (a) GPUs are used to execute computing intensive function evaluations with cuDF and cuML libraries. (b) Parallel execution of function evaluation and optimization on multiple GPUs.</div>
 
 ### Install Instructions
 #### Create a conda Environment
