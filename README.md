@@ -45,12 +45,13 @@ Our solution includes two parts:
 
 Performance of optimization algorithms in terms of (a) cross validation score that is visible to and minimized by optimizers and (b) holdout validation score which represents the generalization ability of the optimizer. The y-axis is [normalized mean score](https://bayesmark.readthedocs.io/en/latest/scoring.html#mean-scores) and lower is better. The top 5 optimizers are highlighted in each sub-figure.</div>
   
+<div align="left"></div>
 2. Optimizers are good at different machine learning models.
 <div align="center"><img src="img/image4.png" />
 Generalization performance of optimizers on each cuML model. The best optimizer for each model (per row) is highlighted.</div>
  
 
-
+<div align="left"></div>
 3. The overall execution time is dominant by model evaluation rather than optimization
 <div align="center"><img src="img/image5.png" />
   (a) Running time comparison between the proposed multi-GPU implementation and multi-core CPU implementation. (b) The breakdown of execution time per iteration.</div>
@@ -59,7 +60,7 @@ Generalization performance of optimizers on each cuML model. The best optimizer 
   Run time comparison of cuML vs sklearn models.</div>
 
 
-
+<div align="left"></div>
 We chose `turbo-skopt` as our final submission because 
 - it has a Top-3 generalization score.
 - it converges faster than single optimizers.
