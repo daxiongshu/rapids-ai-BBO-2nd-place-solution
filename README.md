@@ -9,7 +9,7 @@ In this [competition](https://bbochallenge.com), black-box optimization algorith
 ### Final Submission
 Our final submission is an ensemble of optimizer [TuRBO](https://github.com/uber-research/TuRBO) and [scikit-optimize](https://scikit-optimize.github.io/stable/). [Code](https://github.com/daxiongshu/rapids-ai-BBO-2nd-place-solution/tree/master/example_submissions/turbosk) is in `example_submissions/turbosk`.
 
-### Soltuion Overview
+### Solution Overview
 Our solution includes two parts:
 - A multi-GPU optimized exhaustive search algorithm (this repo).
 - Rapids-enabled Bayesmark ([rapids branch](https://github.com/daxiongshu/bayesmark/tree/rapids)) 
@@ -30,3 +30,8 @@ Our solution includes two parts:
 - git checkout rapids
 - ./build_wheel.sh
 - python setup.py install
+
+### How to run the code
+- please change the global variable `NUM_GPUS` in 'run_one_opt.py' accordingly
+- run a quick sanity check experiment with `python run_one_opt.py`, which takes 6 mins on a dgx-1.
+- run the exhaustive search with `python run_exhaustive_search.py`. which takes less than 24 hours on a dgx-1.
