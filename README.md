@@ -14,6 +14,9 @@ Our solution includes two parts:
 - A multi-GPU optimized exhaustive search algorithm (this repo).
 - Rapids-enabled Bayesmark ([rapids branch](https://github.com/daxiongshu/bayesmark/tree/rapids)) 
 
+<div align="center"><img src="img/image1.png" />
+  GPU acceleration of BBO. (a) GPUs are used to execute computing intensive function evaluations with cuDF and cuML libraries. (b) Parallel execution of function evaluation and optimization on multiple GPUs.
+
 ### Install Instructions
 #### Create a conda Environment
 - conda create -n bbo_rapids python=3.7
@@ -24,14 +27,40 @@ Our solution includes two parts:
 - pip install gpytorch==1.2.1
 - pip install git+https://github.com/uber-research/TuRBO.git@master
 - pip install pySOT==0.2.3 opentuner==0.8.2 nevergrad==0.1.4 hyperopt==0.1.1 scikit-optimize==0.5.2 scikit-learn==0.20.2 xgboost==1.2.1
-#### Install rapids-enabled bayesmark
+#### Install rapids-enabled Bayesmark
 - git clone https://github.com/daxiongshu/bayesmark
 - cd bayesmark
 - git checkout rapids
 - ./build_wheel.sh
 - python setup.py install
 
-### How to run the code
+### How to Run the Code
 - please change the global variable `NUM_GPUS` in 'run_one_opt.py' accordingly
 - run a quick sanity check experiment with `python run_one_opt.py`, which takes 6 mins on a dgx-1.
 - run the exhaustive search with `python run_exhaustive_search.py`. which takes less than 24 hours on a dgx-1.
+
+### Key Findings
+1. The ensemble of optimizers outperform single optimizers in terms of generalization performance.
+<div align="center"><img src="img/image2.png" />
+
+Performance of optimization algorithms in terms of (a) cross validation score that is visible to and minimized by optimizers and (b) holdout validation score which represents the generalization ability of the optimizer. The y-axis is [normalized mean score](https://bayesmark.readthedocs.io/en/latest/scoring.html#mean-scores) and lower is better. The top 5 optimizers are highlighted in each sub-figure.
+  
+2. Optimizers are good at different machine learning models.
+<div align="center"><img src="img/image4.png" />
+Generalization performance of optimizers on each cuML model. The best optimizer for each model (per row) is highlighted.
+ 
+
+
+3. The overall execution time is dominant by model evaluation rather than optimization
+<div align="center"><img src="img/image5.png" />
+  (a) Running time comparison between the proposed multi-GPU implementation and multi-core CPU implementation. (b) The breakdown of execution time per iteration.
+  
+<div align="center"><img src="img/time.png" />
+  Run time comparison of cuML vs sklearn models.
+
+
+
+We chose `turbo-skopt` as our final submission because 
+- it has a Top-3 generalization score.
+- it converges faster than single optimizers.
+- it achieves best performance for a representative deep learning model.
