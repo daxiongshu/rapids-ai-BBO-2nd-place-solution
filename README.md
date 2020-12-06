@@ -11,7 +11,7 @@ Our final submission is an ensemble of optimizer [TuRBO](https://github.com/uber
 
 <div align="center"><img src="img/bbo_table.png" /></div>
 
-Our ensemble method `turbo-skopt` (LB 92.9 ranking 2nd) improves significantly upon the single optimizers it consists of, namely `turbo` (LB 88.9 ranking 24) and `skopt` (LB 88.08 ranking 36) on the final leaderboard. We see similar improvement in our local validation.
+Our ensemble method `turbo-skopt` (LB 92.9 **ranking 2nd**) improves significantly upon the single optimizers it consists of, namely `turbo` (LB 88.9 **ranking 24**) and `skopt` (LB 88.08 **ranking 36**) on the final leaderboard. We see similar improvement in our local validation.
 
 ### Solution Overview
 Our solution includes two parts:
