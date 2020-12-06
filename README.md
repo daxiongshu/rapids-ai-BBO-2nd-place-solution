@@ -9,6 +9,9 @@ In this [competition](https://bbochallenge.com), black-box optimization algorith
 ### Final Submission
 Our final submission is an ensemble of optimizer [TuRBO](https://github.com/uber-research/TuRBO) and [scikit-optimize](https://scikit-optimize.github.io/stable/). [Code](https://github.com/daxiongshu/rapids-ai-BBO-2nd-place-solution/tree/master/example_submissions/turbosk) is in `example_submissions/turbosk`.
 
+<div align="center"><img src="img/bbo_table.png" />
+  The ensemble improves significantly upon the single optimizers it consists of. Higher score is better.</div>
+
 ### Solution Overview
 Our solution includes two parts:
 - A multi-GPU optimized exhaustive search algorithm (this repo).
