@@ -3,6 +3,21 @@ We won **the [2nd place of the NeurIPS 2020 competition](https://bbochallenge.co
 We proposed a simple ensemble algorithm of black-box optimizers that outperforms any single optimizer but within the same timing budget. 
 Evaluation of optimizers is a computing-intensive and time consuming task since the number of test cases grow exponentially with models, datasets and metrics. In our case, we need to **evaluate 15 optimizers, execute 4,230 jobs, train 2.7 million models and run 541,440 optimizations (suggest-observe)**. Utilizing the [RAPIDS](rapids.ai) libraries [cuDF](https://github.com/rapidsai/cudf) and [cuML](https://github.com/rapidsai/cuml), our GPU Accelerated exhaustive search is capable of finding the best ensemble in reasonable time. On a DGX-1, the search time is **reduced from more than 10 days on two 20-core CPUs to less than 24 hours on 8-GPUs.**
 
+### Update
+Our paper is published on arxiv! [GPU Accelerated Exhaustive Search for Optimal Ensemble of Black-Box Optimization Algorithms](https://arxiv.org/abs/2012.04201)
+
+Please use the following BibTeX if you want to cite our work:
+```
+@misc{liu2020gpu,
+    title={GPU Accelerated Exhaustive Search for Optimal Ensemble of Black-Box Optimization Algorithms},
+    author={Jiwei Liu and Bojan Tunguz and Gilberto Titericz},
+    year={2020},
+    eprint={2012.04201},
+    archivePrefix={arXiv},
+    primaryClass={cs.LG}
+}
+```
+
 ### Introduction
 In this [competition](https://bbochallenge.com), black-box optimization algorithms are evaluated on real-world objective functions, using a benchmark system built on top of the AutoML challenge workflow and the [Bayesmark package](https://github.com/uber/bayesmark). This competition has widespread impact as black-box optimization is relevant for hyper-parameter tuning in almost every machine learning project (especially deep learning). The leader board will be determined using the optimization performance on held-out (hidden) objective functions, where the optimizer must run without human intervention. 
 
